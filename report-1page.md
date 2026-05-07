@@ -1,10 +1,10 @@
 # Report 1 page - Lab 4 DES / TripleDES
 
-## Mục tiêu
+## Mục tiêu / Objective
 
-Đồng Đỗ Bảo : tôi làm bài lab này để hiểu rõ cách hoạt động của thuật toán DES và TripleDES, đồng thời thực hành quá trình mã hóa dữ liệu bằng mạng Feistel, sinh round keys và xử lý nhiều block dữ liệu.
+Đồng Đỗ Bảo: em thực hiện bài lab này để hiểu rõ cách hoạt động của thuật toán DES và TripleDES, đồng thời thực hành quá trình mã hóa dữ liệu bằng mạng Feistel, sinh round keys và xử lý nhiều block dữ liệu.
 
-
+---
 
 ## Cách làm / Method
 
@@ -42,6 +42,23 @@ Ngoài ra chương trình còn sử dụng:
 - chuyển đổi nhị phân ↔ thập phân;
 - expansion table;
 - S-box substitution.
+
+Trong Q2 em bổ sung:
+- nhập plaintext từ bàn phím;
+- nhập key từ bàn phím;
+- kiểm tra chuỗi nhị phân hợp lệ;
+- chia plaintext thành nhiều block 64 bit;
+- zero padding cho block cuối;
+- mã hóa nhiều block.
+
+Trong Q3 em bổ sung hàm giải mã DES bằng cách đảo ngược thứ tự round keys.
+
+Trong Q4 em triển khai TripleDES theo mô hình EDE:
+- Encrypt với K1;
+- Decrypt với K2;
+- Encrypt với K3.
+
+Đồng thời viết TripleDES decrypt để khôi phục plaintext.
 
 ---
 
