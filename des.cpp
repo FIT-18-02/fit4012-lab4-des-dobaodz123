@@ -346,93 +346,61 @@ public:
         return process(input, false);
     }
 };
-
 int main() {
 
     string plaintext;
-    string key1;
-    string key2;
-    string key3;
+    string key;
 
-    // User input
     cout << "Enter plaintext: ";
     cin >> plaintext;
 
-    cout << "Enter key 1 (64 bits): ";
-    cin >> key1;
-
-    cout << "Enter key 2 (64 bits): ";
-    cin >> key2;
-
-    cout << "Enter key 3 (64 bits): ";
-    cin >> key3;
+    cout << "Enter key (64 bits): ";
+    cin >> key;
 
     // Validate binary input
-    if (!is_binary(plaintext) ||
-        !is_binary(key1) ||
-        !is_binary(key2) ||
-        !is_binary(key3)) {
-
+    if (!is_binary(plaintext) || !is_binary(key)) {
         cout << "Invalid binary input!" << endl;
         return 1;
     }
 
     // Validate key length
-    if (key1.size() != 64 ||
-        key2.size() != 64 ||
-        key3.size() != 64) {
-
-        cout << "Each key must be exactly 64 bits!" << endl;
+    if (key.size() != 64) {
+        cout << "Key must be exactly 64 bits!" << endl;
         return 1;
     }
 
-    // Split blocks
+    // Split plaintext into 64-bit blocks
     vector<string> blocks = split_blocks(plaintext);
 
-    // Generate keys
-    KeyGenerator keygen1(key1);
-    keygen1.generateRoundKeys();
+    // Generate round keys
+    KeyGenerator keygen(key);
+    keygen.generateRoundKeys();
 
-    KeyGenerator keygen2(key2);
-    keygen2.generateRoundKeys();
+    vector<string> roundKeys = keygen.getRoundKeys();
 
-    KeyGenerator keygen3(key3);
-    keygen3.generateRoundKeys();
+    // Create DES object
+    DES des(roundKeys);
 
-    // Create DES objects
-    DES des1(keygen1.getRoundKeys());
-    DES des2(keygen2.getRoundKeys());
-    DES des3(keygen3.getRoundKeys());
+    string final_cipher = "";
 
-    // Triple DES Encryption
-    string ciphertext = "";
-
+    // Encrypt all blocks
     for (string block : blocks) {
-
-        string step1 = des1.encrypt(block);
-        string step2 = des2.decrypt(step1);
-        string step3 = des3.encrypt(step2);
-
-        ciphertext += step3;
+        final_cipher += des.encrypt(block);
     }
 
-    cout << "Ciphertext: " << ciphertext << endl;
+    cout << "Ciphertext: " << final_cipher << endl;
 
-    // Triple DES Decryption
-    string decrypted = "";
+    // Decrypt all blocks
+    string decrypted_text = "";
 
-    for (int i = 0; i < ciphertext.size(); i += 64) {
+    for (int i = 0; i < final_cipher.size(); i += 64) {
 
-        string block = ciphertext.substr(i, 64);
+        string cipher_block = final_cipher.substr(i, 64);
 
-        string step1 = des3.decrypt(block);
-        string step2 = des2.encrypt(step1);
-        string step3 = des1.decrypt(step2);
-
-        decrypted += step3;
+        decrypted_text += des.decrypt(cipher_block);
     }
 
-    cout << "Decrypted text: " << decrypted << endl;
+    cout << "Decrypted text: " << decrypted_text << endl;
 
     return 0;
 }
