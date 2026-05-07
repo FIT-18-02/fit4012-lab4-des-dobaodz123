@@ -139,7 +139,7 @@ public:
             roundKeys.push_back(roundKey);
 
             // Optional: print key
-            cout << "Key " << i + 1 << ": " << roundKey << endl;
+           // cout << "Key " << i + 1 << ": " << roundKey << endl;
         }
     }
 
