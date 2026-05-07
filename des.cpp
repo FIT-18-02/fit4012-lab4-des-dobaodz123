@@ -276,30 +276,190 @@ class DES {
     
             return ciphertext;
         }
+        string decrypt(const string& input) {
+
+    // Initial permutation
+    string perm = initial_permutation(input);
+
+    // Split into left and right
+    string left = perm.substr(0, 32);
+    string right = perm.substr(32, 32);
+
+    // 16 Feistel rounds (reverse keys)
+    for (int i = 15; i >= 0; i--) {
+
+        // Expansion
+        string right_expanded = "";
+
+        for (int j = 0; j < 48; j++) {
+            right_expanded += right[expansion_table[j] - 1];
+        }
+
+        // XOR with round key
+        string xored = Xor(round_keys[i], right_expanded);
+
+        // S-box substitution
+        string res = "";
+
+        for (int j = 0; j < 8; j++) {
+
+            string row1 =
+                xored.substr(j * 6, 1) +
+                xored.substr(j * 6 + 5, 1);
+
+            int row = convert_binary_to_decimal(row1);
+
+            string col1 = xored.substr(j * 6 + 1, 4);
+
+            int col = convert_binary_to_decimal(col1);
+
+            int val = substition_boxes[j][row][col];
+
+            res += convert_decimal_to_binary(val);
+        }
+
+        // Permutation
+        string perm2 = "";
+
+        for (int j = 0; j < 32; j++) {
+            perm2 += res[permutation_tab[j] - 1];
+        }
+
+        // XOR and swap
+        string new_right = Xor(perm2, left);
+
+        left = right;
+        right = new_right;
+    }
+
+    // Final swap
+    string combined_text = right + left;
+
+    // Inverse permutation
+    string plaintext =
+        inverse_initial_permutation(combined_text);
+
+    return plaintext;
+}
 };
-    
+// Check binary input
+bool is_binary(const string& s) {
+    for (char c : s) {
+        if (c != '0' && c != '1') {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Split plaintext into 64-bit blocks with zero padding
+vector<string> split_blocks(string plaintext) {
+    vector<string> blocks;
+
+    for (int i = 0; i < plaintext.size(); i += 64) {
+        string block = plaintext.substr(i, 64);
+
+        // Zero padding
+        if (block.size() < 64) {
+            block.append(64 - block.size(), '0');
+        }
+
+        blocks.push_back(block);
+    }
+
+    return blocks;
+}
+
 // Main function
 int main() {
-    // Example plaintext (64 bits)
-    string plaintext = "0001001000110100010101100111100010011010101111001101111011110001";
-    
-    // Example key (64 bits)
-    string key = "0001001100110100010101110111100110011011101111001101111111110001";
-    
-    // Generate round keys
-    KeyGenerator keygen(key);
-    keygen.generateRoundKeys(); 
-    
-    vector<string> roundKeys = keygen.getRoundKeys();
-    
-    // Create DES object
-    DES des(roundKeys);
-    
-    // Encrypt
-    string ciphertext = des.encrypt(plaintext);
-    
-    cout << "Ciphertext: " << ciphertext << endl;
-    
+
+    string plaintext;
+    string key1;
+    string key2;
+    string key3;
+
+    // Input plaintext
+    cout << "Enter plaintext: ";
+    cin >> plaintext;
+
+    // Input keys
+    cout << "Enter key 1 (64 bits): ";
+    cin >> key1;
+
+    cout << "Enter key 2 (64 bits): ";
+    cin >> key2;
+
+    cout << "Enter key 3 (64 bits): ";
+    cin >> key3;
+
+    // Validate binary input
+    if (!is_binary(plaintext) || !is_binary(key1) || !is_binary(key2) || !is_binary(key3)) {
+        cout << "Invalid binary input!" << endl;
+        return 1;
+    }
+
+   if (key1.size() != 64 || 
+    key2.size() != 64 || 
+    key3.size() != 64) {
+
+    cout << "Each key must be exactly 64 bits!" << endl;
+    return 1;
+}
+
+    // Split plaintext into blocks
+    vector<string> blocks = split_blocks(plaintext);
+
+    // Generate round keys for each key
+    KeyGenerator keygen1(key1);
+    keygen1.generateRoundKeys();
+    vector<string> roundKeys1 = keygen1.getRoundKeys();
+
+    KeyGenerator keygen2(key2);
+    keygen2.generateRoundKeys();
+    vector<string> roundKeys2 = keygen2.getRoundKeys();
+
+    KeyGenerator keygen3(key3);
+    keygen3.generateRoundKeys();
+    vector<string> roundKeys3 = keygen3.getRoundKeys();
+
+    // Create DES objects
+    DES des1(roundKeys1);
+    DES des2(roundKeys2);
+    DES des3(roundKeys3);
+
+    string final_cipher = "";
+
+for (string block : blocks) {
+
+    // E with K1
+    string step1 = des1.encrypt(block);
+
+    // D with K2
+    string step2 = des2.decrypt(step1);
+
+    // E with K3
+    string step3 = des3.encrypt(step2);
+
+    final_cipher += step3;
+}
+
+    // Output final ciphertext
+    cout << "Ciphertext: " << final_cipher << endl;
+    cout << endl;
+
+    string decrypted_text = "";
+
+    for (int i = 0; i < final_cipher.size(); i += 64) {
+        string cipher_block = final_cipher.substr(i, 64);
+        string plain = des3.decrypt(cipher_block);
+        plain = des2.encrypt(plain);
+        plain = des1.decrypt(plain);
+        decrypted_text += plain;
+    }
+
+    cout << "Decrypted text: "
+         << decrypted_text << endl;
+
     return 0;
 }
 
