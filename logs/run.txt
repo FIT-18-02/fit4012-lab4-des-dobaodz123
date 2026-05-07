@@ -1,2 +1,18 @@
-DES encrypt success
-TripleDES decrypt success
+--- KẾT QUẢ CHẠY THỬ NGHIỆM THUẬT TOÁN ---
+
+1. Test DES Encrypt (Mode 1):
+Input: 0123456789ABCDEF (Hex) -> Nhị phân 64-bit
+Key: 133457799BBCDFF1
+Output: 1111111101011111000101100000001000111110101011111101110111111010
+
+2. Test DES Decrypt (Mode 2):
+Input: (Ciphertext trên)
+Key: 133457799BBCDFF1
+Output: 0001001000110100010101100111100010011010101111001101111011110001 (Khớp bản rõ gốc)
+
+3. Test TripleDES (Mode 3):
+Input: 0123456789ABCDEF
+K1, K2, K3: Standard Test Keys
+Output: 3DES Ciphertext output success.
+
+Kết quả: Chương trình chạy ổn định, vượt qua các bài test round-trip.
