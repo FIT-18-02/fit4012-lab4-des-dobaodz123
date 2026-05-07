@@ -254,7 +254,6 @@ public:
 
 // ================= MAIN (FIXED FOR AUTO GRADER) =================
 int main() {
-
     string plaintext, key;
 
     cin >> plaintext >> key;
