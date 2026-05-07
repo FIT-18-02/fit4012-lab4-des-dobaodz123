@@ -69,3 +69,6 @@ Chương trình biên dịch và chạy thành công bằng:
 ```bash
 g++ des.cpp -o des
 ./des.exe
+
+## Kết luận / Conclusion
+Qua bài lab em hiểu rõ hơn về DES và TripleDES.
