@@ -57,7 +57,9 @@ cmake --build build
 
 ## 3. Input / Đầu vào
 
-TODO_STUDENT: Mô tả rõ đầu vào của chương trình sau khi em hoàn thiện bài lab.
+Đầu vào của chương trình:
+- plaintext dạng chuỗi nhị phân;
+- các key 64 bit cho DES hoặc TripleDES.
 
 Gợi ý nên nêu:
 - plaintext đang được nhập như thế nào
@@ -66,8 +68,9 @@ Gợi ý nên nêu:
 - định dạng dữ liệu là chuỗi bit, chuỗi ký tự hay file
 
 ## 4. Output / Đầu ra
-
-TODO_STUDENT: Mô tả rõ đầu ra của chương trình.
+Đầu ra của chương trình:
+- ciphertext sau khi mã hóa;
+- plaintext sau khi giải mã.
 
 Gợi ý nên nêu:
 - ciphertext hiển thị ra sao
@@ -76,8 +79,7 @@ Gợi ý nên nêu:
 - với TripleDES thì đầu ra gồm những gì
 
 ## 5. Padding đang dùng
-
-TODO_STUDENT: Giải thích cơ chế padding em dùng.
+- nếu block cuối chưa đủ 64 bit thì chương trình thêm các bit 0 vào cuối block.
 
 Gợi ý:
 - nếu plaintext dài hơn 64 bit thì chia block như thế nào
@@ -123,7 +125,7 @@ Trước khi nộp, cần có:
 - `tests/` với ít nhất 5 test
 - có negative test cho `tamper` và `wrong key`
 - `logs/` có ít nhất 1 file minh chứng thật
-- không còn dòng `TODO_STUDENT`
+- không còn dòng `helloT`
 
 ## 10. Lưu ý về CI
 
@@ -132,7 +134,7 @@ CI sẽ **không chỉ kiểm tra file có tồn tại** mà còn kiểm tra:
 - các mục bắt buộc trong report
 - sự hiện diện của negative tests
 - có minh chứng trong `logs/`
-- repo **không còn placeholder `TODO_STUDENT`**
+- repo **không còn placeholder `hello`**
 
 Vì vậy repo starter này sẽ **chưa pass CI** cho tới khi sinh viên hoàn thiện nội dung.
 
