@@ -33,7 +33,6 @@ bool is_binary(const string& s) {
             return false;
         }
     }
-
     return true;
 }
 
@@ -51,13 +50,13 @@ string initial_permutation(const string& input) {
         63,55,47,39,31,23,15,7
     };
 
-    string result = "";
+    string output = "";
 
     for (int i = 0; i < 64; i++) {
-        result += input[ip[i] - 1];
+        output += input[ip[i] - 1];
     }
 
-    return result;
+    return output;
 }
 
 // Inverse Initial Permutation
@@ -74,13 +73,13 @@ string inverse_initial_permutation(const string& input) {
         33,1,41,9,49,17,57,25
     };
 
-    string result = "";
+    string output = "";
 
     for (int i = 0; i < 64; i++) {
-        result += input[ip_inverse[i] - 1];
+        output += input[ip_inverse[i] - 1];
     }
 
-    return result;
+    return output;
 }
 
 // Split plaintext into 64-bit blocks
@@ -92,7 +91,6 @@ vector<string> split_blocks(string plaintext) {
 
         string block = plaintext.substr(i, 64);
 
-        // Zero padding
         if (block.size() < 64) {
             block.append(64 - block.size(), '0');
         }
@@ -151,14 +149,14 @@ public:
 
         roundKeys.clear();
 
-        string permutedKey = "";
+        string permuted_key = "";
 
         for (int i = 0; i < 56; i++) {
-            permutedKey += key[pc1[i] - 1];
+            permuted_key += key[pc1[i] - 1];
         }
 
-        string left = permutedKey.substr(0, 28);
-        string right = permutedKey.substr(28, 28);
+        string left = permuted_key.substr(0, 28);
+        string right = permuted_key.substr(28, 28);
 
         for (int i = 0; i < 16; i++) {
 
@@ -192,8 +190,6 @@ class DES {
 
 private:
 
-    vector<string> round_keys;
-
     const int expansion_table[48] = {
         32,1,2,3,4,5,4,5,
         6,7,8,9,8,9,10,11,
@@ -215,55 +211,65 @@ private:
     };
 
     const int sbox[8][4][16] = {
-    {
-        {14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7},
-        {0,15,7,4,14,2,13,1,10,6,12,11,9,5,3,8},
-        {4,1,14,8,13,6,2,11,15,12,9,7,3,10,5,0},
-        {15,12,8,2,4,9,1,7,5,11,3,14,10,0,6,13}
-    },
-    {
-        {15,1,8,14,6,11,3,4,9,7,2,13,12,0,5,10},
-        {3,13,4,7,15,2,8,14,12,0,1,10,6,9,11,5},
-        {0,14,7,11,10,4,13,1,5,8,12,6,9,3,2,15},
-        {13,8,10,1,3,15,4,2,11,6,7,12,0,5,14,9}
-    },
-    {
-        {10,0,9,14,6,3,15,5,1,13,12,7,11,4,2,8},
-        {13,7,0,9,3,4,6,10,2,8,5,14,12,11,15,1},
-        {13,6,4,9,8,15,3,0,11,1,2,12,5,10,14,7},
-        {1,10,13,0,6,9,8,7,4,15,14,3,11,5,2,12}
-    },
-    {
-        {7,13,14,3,0,6,9,10,1,2,8,5,11,12,4,15},
-        {13,8,11,5,6,15,0,3,4,7,2,12,1,10,14,9},
-        {10,6,9,0,12,11,7,13,15,1,3,14,5,2,8,4},
-        {3,15,0,6,10,1,13,8,9,4,5,11,12,7,2,14}
-    },
-    {
-        {2,12,4,1,7,10,11,6,8,5,3,15,13,0,14,9},
-        {14,11,2,12,4,7,13,1,5,0,15,10,3,9,8,6},
-        {4,2,1,11,10,13,7,8,15,9,12,5,6,3,0,14},
-        {11,8,12,7,1,14,2,13,6,15,0,9,10,4,5,3}
-    },
-    {
-        {12,1,10,15,9,2,6,8,0,13,3,4,14,7,5,11},
-        {10,15,4,2,7,12,9,5,6,1,13,14,0,11,3,8},
-        {9,14,15,5,2,8,12,3,7,0,4,10,1,13,11,6},
-        {4,3,2,12,9,5,15,10,11,14,1,7,6,0,8,13}
-    },
-    {
-        {4,11,2,14,15,0,8,13,3,12,9,7,5,10,6,1},
-        {13,0,11,7,4,9,1,10,14,3,5,12,2,15,8,6},
-        {1,4,11,13,12,3,7,14,10,15,6,8,0,5,9,2},
-        {6,11,13,8,1,4,10,7,9,5,0,15,14,2,3,12}
-    },
-    {
-        {13,2,8,4,6,15,11,1,10,9,3,14,5,0,12,7},
-        {1,15,13,8,10,3,7,4,12,5,6,11,0,14,9,2},
-        {7,11,4,1,9,12,14,2,0,6,10,13,15,3,5,8},
-        {2,1,14,7,4,10,8,13,15,12,9,0,3,5,6,11}
-    }
+
+        {
+            {14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7},
+            {0,15,7,4,14,2,13,1,10,6,12,11,9,5,3,8},
+            {4,1,14,8,13,6,2,11,15,12,9,7,3,10,5,0},
+            {15,12,8,2,4,9,1,7,5,11,3,14,10,0,6,13}
+        },
+
+        {
+            {15,1,8,14,6,11,3,4,9,7,2,13,12,0,5,10},
+            {3,13,4,7,15,2,8,14,12,0,1,10,6,9,11,5},
+            {0,14,7,11,10,4,13,1,5,8,12,6,9,3,2,15},
+            {13,8,10,1,3,15,4,2,11,6,7,12,0,5,14,9}
+        },
+
+        {
+            {10,0,9,14,6,3,15,5,1,13,12,7,11,4,2,8},
+            {13,7,0,9,3,4,6,10,2,8,5,14,12,11,15,1},
+            {13,6,4,9,8,15,3,0,11,1,2,12,5,10,14,7},
+            {1,10,13,0,6,9,8,7,4,15,14,3,11,5,2,12}
+        },
+
+        {
+            {7,13,14,3,0,6,9,10,1,2,8,5,11,12,4,15},
+            {13,8,11,5,6,15,0,3,4,7,2,12,1,10,14,9},
+            {10,6,9,0,12,11,7,13,15,1,3,14,5,2,8,4},
+            {3,15,0,6,10,1,13,8,9,4,5,11,12,7,2,14}
+        },
+
+        {
+            {2,12,4,1,7,10,11,6,8,5,3,15,13,0,14,9},
+            {14,11,2,12,4,7,13,1,5,0,15,10,3,9,8,6},
+            {4,2,1,11,10,13,7,8,15,9,12,5,6,3,0,14},
+            {11,8,12,7,1,14,2,13,6,15,0,9,10,4,5,3}
+        },
+
+        {
+            {12,1,10,15,9,2,6,8,0,13,3,4,14,7,5,11},
+            {10,15,4,2,7,12,9,5,6,1,13,14,0,11,3,8},
+            {9,14,15,5,2,8,12,3,7,0,4,10,1,13,11,6},
+            {4,3,2,12,9,5,15,10,11,14,1,7,6,0,8,13}
+        },
+
+        {
+            {4,11,2,14,15,0,8,13,3,12,9,7,5,10,6,1},
+            {13,0,11,7,4,9,1,10,14,3,5,12,2,15,8,6},
+            {1,4,11,13,12,3,7,14,10,15,6,8,0,5,9,2},
+            {6,11,13,8,1,4,10,7,9,5,0,15,14,2,3,12}
+        },
+
+        {
+            {13,2,8,4,6,15,11,1,10,9,3,14,5,0,12,7},
+            {1,15,13,8,10,3,7,4,12,5,6,11,0,14,9,2},
+            {7,11,4,1,9,12,14,2,0,6,10,13,15,3,5,8},
+            {2,1,14,7,4,10,8,13,15,12,9,0,3,5,6,11}
+        }
     };
+
+    vector<string> round_keys;
 
 public:
 
@@ -271,47 +277,54 @@ public:
         round_keys = keys;
     }
 
-    string encrypt(string input) {
+    string process(string input, bool encrypt_mode) {
 
         string perm = initial_permutation(input);
 
         string left = perm.substr(0, 32);
         string right = perm.substr(32, 32);
 
-        for (int i = 0; i < 16; i++) {
+        for (int round = 0; round < 16; round++) {
 
-            string right_expanded = "";
+            string expanded = "";
 
-            for (int j = 0; j < 48; j++) {
-                right_expanded += right[expansion_table[j] - 1];
+            for (int i = 0; i < 48; i++) {
+                expanded += right[expansion_table[i] - 1];
             }
 
-            string xored = Xor(right_expanded, round_keys[i]);
+            string round_key;
 
-            string res = "";
+            if (encrypt_mode) {
+                round_key = round_keys[round];
+            } else {
+                round_key = round_keys[15 - round];
+            }
 
-            for (int j = 0; j < 8; j++) {
+            string xored = Xor(expanded, round_key);
+
+            string sbox_result = "";
+
+            for (int i = 0; i < 8; i++) {
 
                 string row_bits =
-                    xored.substr(j * 6, 1) +
-                    xored.substr(j * 6 + 5, 1);
+                    string(1, xored[i * 6]) +
+                    string(1, xored[i * 6 + 5]);
 
                 int row = convert_binary_to_decimal(row_bits);
 
-                string col_bits =
-                    xored.substr(j * 6 + 1, 4);
+                string col_bits = xored.substr(i * 6 + 1, 4);
 
                 int col = convert_binary_to_decimal(col_bits);
 
-                int val = sbox[j][row][col];
+                int val = sbox[i][row][col];
 
-                res += convert_decimal_to_binary(val);
+                sbox_result += convert_decimal_to_binary(val);
             }
 
             string perm2 = "";
 
-            for (int j = 0; j < 32; j++) {
-                perm2 += res[permutation_tab[j] - 1];
+            for (int i = 0; i < 32; i++) {
+                perm2 += sbox_result[permutation_tab[i] - 1];
             }
 
             string new_right = Xor(left, perm2);
@@ -324,43 +337,94 @@ public:
 
         return inverse_initial_permutation(combined);
     }
+
+    string encrypt(string input) {
+        return process(input, true);
+    }
+
+    string decrypt(string input) {
+        return process(input, false);
+    }
 };
 
 int main() {
 
     string plaintext;
-    string key;
+    string key1;
+    string key2;
+    string key3;
 
     cout << "Enter plaintext: ";
     cin >> plaintext;
 
-    cout << "Enter key (64 bits): ";
-    cin >> key;
+    cout << "Enter key 1 (64 bits): ";
+    cin >> key1;
 
-    if (!is_binary(plaintext) || !is_binary(key)) {
+    cout << "Enter key 2 (64 bits): ";
+    cin >> key2;
+
+    cout << "Enter key 3 (64 bits): ";
+    cin >> key3;
+
+    if (!is_binary(plaintext) ||
+        !is_binary(key1) ||
+        !is_binary(key2) ||
+        !is_binary(key3)) {
+
+        cout << "Invalid binary input!" << endl;
         return 1;
     }
 
-    if (key.size() != 64) {
+    if (key1.size() != 64 ||
+        key2.size() != 64 ||
+        key3.size() != 64) {
+
+        cout << "Each key must be exactly 64 bits!" << endl;
         return 1;
     }
 
     vector<string> blocks = split_blocks(plaintext);
 
-    KeyGenerator keygen(key);
-    keygen.generateRoundKeys();
+    KeyGenerator keygen1(key1);
+    keygen1.generateRoundKeys();
 
-    vector<string> roundKeys = keygen.getRoundKeys();
+    KeyGenerator keygen2(key2);
+    keygen2.generateRoundKeys();
 
-    DES des(roundKeys);
+    KeyGenerator keygen3(key3);
+    keygen3.generateRoundKeys();
 
-    string final_cipher = "";
+    DES des1(keygen1.getRoundKeys());
+    DES des2(keygen2.getRoundKeys());
+    DES des3(keygen3.getRoundKeys());
+
+    string ciphertext = "";
 
     for (string block : blocks) {
-        final_cipher += des.encrypt(block);
+
+        string step1 = des1.encrypt(block);
+        string step2 = des2.decrypt(step1);
+        string step3 = des3.encrypt(step2);
+
+        ciphertext += step3;
     }
 
-    cout << "Ciphertext: " << final_cipher << endl;
+    cout << "Ciphertext: " << ciphertext << endl;
+
+    string decrypted = "";
+
+    for (int i = 0; i < ciphertext.size(); i += 64) {
+
+        string block = ciphertext.substr(i, 64);
+
+        string step1 = des3.decrypt(block);
+        string step2 = des2.encrypt(step1);
+        string step3 = des1.decrypt(step2);
+
+        decrypted += step3;
+    }
+
+    cout << "Decrypted text: " << decrypted << endl;
 
     return 0;
 }
