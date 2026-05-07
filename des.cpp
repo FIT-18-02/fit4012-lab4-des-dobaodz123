@@ -349,39 +349,17 @@ public:
 
 int main() {
 
-    string plaintext;
-    string key1;
-    string key2;
-    string key3;
+    string plaintext =
+        "0001001000110100010101100111100010011010101111001101111011110001";
 
-    cout << "Enter plaintext: ";
-    cin >> plaintext;
+    string key1 =
+        "0001001100110100010101110111100110011011101111001101111111110001";
 
-    cout << "Enter key 1 (64 bits): ";
-    cin >> key1;
+    string key2 =
+        "1111000011110000111100001111000011110000111100001111000011110000";
 
-    cout << "Enter key 2 (64 bits): ";
-    cin >> key2;
-
-    cout << "Enter key 3 (64 bits): ";
-    cin >> key3;
-
-    if (!is_binary(plaintext) ||
-        !is_binary(key1) ||
-        !is_binary(key2) ||
-        !is_binary(key3)) {
-
-        cout << "Invalid binary input!" << endl;
-        return 1;
-    }
-
-    if (key1.size() != 64 ||
-        key2.size() != 64 ||
-        key3.size() != 64) {
-
-        cout << "Each key must be exactly 64 bits!" << endl;
-        return 1;
-    }
+    string key3 =
+        "1010101010101010101010101010101010101010101010101010101010101010";
 
     vector<string> blocks = split_blocks(plaintext);
 
