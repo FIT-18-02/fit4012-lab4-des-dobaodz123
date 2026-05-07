@@ -1,0 +1,2 @@
+DES encrypt success
+TripleDES decrypt success
